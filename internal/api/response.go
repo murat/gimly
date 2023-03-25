@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/render"
+	"github.com/murat/gimly/internal/db"
 )
 
 // ErrResponse ...
@@ -48,4 +49,15 @@ func ErrInternalServer(err error) render.Renderer {
 		StatusText: http.StatusText(http.StatusInternalServerError),
 		ErrorText:  err.Error(),
 	}
+}
+
+// Response ...
+type Response struct {
+	ID   int     `json:"-"`
+	Data *db.URL `json:"data"`
+}
+
+// Render ...
+func (e *Response) Render(_ http.ResponseWriter, _ *http.Request) error {
+	return nil
 }

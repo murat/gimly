@@ -2,7 +2,6 @@ package api
 
 import (
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -75,7 +74,9 @@ func (a *api) CreateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, _ = fmt.Fprintf(w, "%+v", url.ShortID)
+	_ = render.Render(w, r, &Response{
+		Data: url,
+	})
 }
 
 // GetHandler ...

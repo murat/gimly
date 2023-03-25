@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/murat/gimly/internal/gimly"
 
@@ -12,9 +13,11 @@ import (
 
 // URL db entity
 type URL struct {
-	*gorm.Model
-	ShortURL gimly.ShortURL `gorm:"embedded"`
-	ShortID  string         `json:"short_id" gorm:"index"`
+	ID        uint           `json:"-" gorm:"primaryKey"`
+	CreatedAt time.Time      `json:"-"`
+	UpdatedAt time.Time      `json:"-"`
+	ShortURL  gimly.ShortURL `gorm:"embedded"`
+	ShortID   string         `json:"short_id" gorm:"index"`
 }
 
 // New database setup
