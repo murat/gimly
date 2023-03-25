@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  gimly:
+    container_name: gimly
+    image: gimly:latest
+    build:
+      context: .
+    healthcheck:
+      test: [ "CMD-SHELL", "nc -z 127.0.0.1 8080 || exit 1" ]
+      interval: 5m
+      start_period: 1m
+    ports:
+      - '8080:8080'

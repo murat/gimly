@@ -1,0 +1,38 @@
+name: test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ["1.18"]
+    runs-on: ubuntu-latest
+    name: Go ${{ matrix.go }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+      - name: Build
+        run: make build
+      - name: Test
+        run: make test
+      - name: Coverage
+        run: make coverage
+      - name: Archive built files
+        uses: actions/upload-artifact@v2
+        with:
+          name: built files
+          path: bin
+      - name: Archive coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage report
+          path: cover.html
