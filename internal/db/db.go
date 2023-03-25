@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/murat/gimly/internal/gimly"
 
@@ -23,7 +24,9 @@ func New(path string) (*gorm.DB, error) {
 		return nil, fmt.Errorf("could not connect to database, %w", err)
 	}
 
-	db.AutoMigrate(&URL{})
+	if err := db.AutoMigrate(&URL{}); err != nil {
+		log.Println("db migration failed")
+	}
 
 	return db, nil
 }

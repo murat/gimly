@@ -51,13 +51,13 @@ func (a *api) AddRoutes() {
 func (a *api) CreateHandler(w http.ResponseWriter, r *http.Request) {
 	req := &CreateRequest{}
 	if err := render.Bind(r, req); err != nil {
-		render.Render(w, r, ErrInvalidRequest(err))
+		_ = render.Render(w, r, ErrInvalidRequest(err))
 	}
 
 	shortID, err := nanoid.Standard(8)
 	if err != nil {
 		a.logger.Printf("generate short id failed, %v\n", err.Error())
-		render.Render(w, r, ErrInternalServer(err))
+		_ = render.Render(w, r, ErrInternalServer(err))
 	}
 
 	url := &db.URL{
@@ -70,7 +70,7 @@ func (a *api) CreateHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err := a.db.Create(url).Error; err != nil {
 		a.logger.Printf("create short link failed, %v\n", err.Error())
-		render.Render(w, r, ErrInternalServer(err))
+		_ = render.Render(w, r, ErrInternalServer(err))
 
 		return
 	}
@@ -83,13 +83,13 @@ func (a *api) GetHandler(w http.ResponseWriter, r *http.Request) {
 	url := db.URL{ShortID: chi.URLParam(r, "id")}
 	if err := a.db.Where("short_id = ?", url.ShortID).First(&url).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			render.Render(w, r, ErrNotFound(err))
+			_ = render.Render(w, r, ErrNotFound(err))
 
 			return
 		}
 
 		a.logger.Printf("query failed, %v\n", err.Error())
-		render.Render(w, r, ErrInternalServer(err))
+		_ = render.Render(w, r, ErrInternalServer(err))
 
 		return
 	}
