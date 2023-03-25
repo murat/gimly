@@ -18,32 +18,18 @@ import (
 type Api interface {
 	CreateHandler(w http.ResponseWriter, r *http.Request)
 	GetHandler(w http.ResponseWriter, r *http.Request)
-	Handler() *chi.Mux
 }
 
 type api struct {
 	db     *gorm.DB
-	router *chi.Mux
 	logger *log.Logger
 }
 
 // New setups the API
-func New(db *gorm.DB, router *chi.Mux, logger *log.Logger) Api {
-	a := &api{db, router, logger}
-	a.AddRoutes()
+func New(db *gorm.DB, logger *log.Logger) Api {
+	a := &api{db, logger}
 
 	return a
-}
-
-// Handler exports the router
-func (a *api) Handler() *chi.Mux {
-	return a.router
-}
-
-// AddRoutes ...
-func (a *api) AddRoutes() {
-	a.router.Post("/", a.CreateHandler)
-	a.router.Get("/{id}", a.GetHandler)
 }
 
 // CreateHandler ...
