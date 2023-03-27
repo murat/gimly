@@ -16,7 +16,7 @@ type URL struct {
 	ID        uint           `json:"-" gorm:"primaryKey"`
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
-	ShortURL  gimly.ShortURL `gorm:"embedded"`
+	ShortURL  gimly.ShortURL `json:"url" gorm:"embedded"`
 	ShortID   string         `json:"short_id" gorm:"index"`
 }
 

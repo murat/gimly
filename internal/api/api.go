@@ -18,6 +18,7 @@ import (
 type Api interface {
 	CreateHandler(w http.ResponseWriter, r *http.Request)
 	GetHandler(w http.ResponseWriter, r *http.Request)
+	GetAllHandler(w http.ResponseWriter, r *http.Request)
 }
 
 type api struct {
@@ -82,4 +83,18 @@ func (a *api) GetHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Redirect(w, r, url.ShortURL.URL, http.StatusPermanentRedirect)
+}
+
+// GetAllHandler ...
+func (a *api) GetAllHandler(w http.ResponseWriter, r *http.Request) {
+	var urls []db.URL
+
+	if err := a.db.Find(&urls).Error; err != nil {
+		a.logger.Printf("query failed, %v\n", err.Error())
+		_ = render.Render(w, r, ErrInternalServer(err))
+
+		return
+	}
+
+	render.Render(w, r, &ListResponse{Data: urls})
 }

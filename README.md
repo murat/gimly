@@ -11,14 +11,13 @@ Gimly is a URL shortener service written in Golang. It's just a hobby project, s
 ```bash
 git clone git@github.com:murat/gimly.git && cd gimly
 go mod download
+cd web && npm install && npm run build && cd ..
 go run cmd/gimly/main.go
-
-# Will listen :8080 port
-
-# Or you can run gimly via docker
-docker build -t gimly .
-docker run -dp 8080:8080 gimly
+# or
+air # you need to install it
 ```
+
+Will listen :8080 port 🤞
 
 # API Contracts
 
@@ -27,11 +26,11 @@ docker run -dp 8080:8080 gimly
 ## Create a short url
 
 ```bash
-echo '{"data":{"title":"Github","url":"https://github.com"}}' | http post :8080
+echo '{"data":{"title":"Github","url":"https://github.com"}}' | http post :8080/api/url
 
 {
     "data": {
-        "ShortURL": {
+        "url": {
             "title": "Github",
             "url": "https://github.com"
         },
@@ -40,10 +39,26 @@ echo '{"data":{"title":"Github","url":"https://github.com"}}' | http post :8080
 }
 ```
 
+## Get list of urls
+
+```bash
+http :8080/api/url
+
+{
+    "data": [{
+        "url": {
+            "title": "Github",
+            "url": "https://github.com"
+        },
+        "short_id": "UrIRHQx9"
+    }...],
+}
+```
+
 ## Get a short url
 
 ```bash
-http :8080/UrIRHQx9
+http :8080/u/UrIRHQx9
 ```
 
 It will redirect with HTTP status 308 🤞

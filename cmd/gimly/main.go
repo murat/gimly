@@ -72,9 +72,10 @@ func run(args []string) error {
 	r.HandleFunc("/{*.(json|ico|png|jpg|webm|txt)}", staticHandler)
 
 	apiServer := api.New(db, logger)
+	r.Get("/u/{id}", apiServer.GetHandler)
 	r.Route("/api", func(r chi.Router) {
 		r.Post("/url", apiServer.CreateHandler)
-		r.Get("/url/{id}", apiServer.GetHandler)
+		r.Get("/url", apiServer.GetAllHandler)
 	})
 
 	app := &App{

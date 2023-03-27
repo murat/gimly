@@ -61,3 +61,13 @@ type Response struct {
 func (e *Response) Render(_ http.ResponseWriter, _ *http.Request) error {
 	return nil
 }
+
+// ListResponse ...
+type ListResponse struct {
+	Data []db.URL `json:"data"`
+}
+
+// Render ...
+func (e *ListResponse) Render(_ http.ResponseWriter, _ *http.Request) error {
+	return nil
+}
