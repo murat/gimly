@@ -38,12 +38,16 @@ func (a *api) CreateHandler(w http.ResponseWriter, r *http.Request) {
 	req := &CreateRequest{}
 	if err := render.Bind(r, req); err != nil {
 		_ = render.Render(w, r, ErrInvalidRequest(err))
+
+		return
 	}
 
 	shortID, err := nanoid.Standard(8)
 	if err != nil {
 		a.logger.Printf("generate short id failed, %v\n", err.Error())
 		_ = render.Render(w, r, ErrInternalServer(err))
+
+		return
 	}
 
 	url := &db.URL{
