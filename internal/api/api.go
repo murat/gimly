@@ -100,5 +100,5 @@ func (a *api) GetAllHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.Render(w, r, &ListResponse{Data: urls})
+	_ = render.Render(w, r, &ListResponse{Data: urls})
 }
