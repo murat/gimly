@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
-import { isRegexLiteral } from '@babel/types';
 
 interface Url {
   url: {
