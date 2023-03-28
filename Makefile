@@ -1,9 +1,13 @@
-build: clean
+build-web:
+	cd web && npm install && npm run build && cd ../
+
+build: clean build-web
 	GOARCH=amd64 GOOS=linux go build -ldflags="-s -w" -o ./bin/gimly cmd/gimly/main.go
 
 clean:
 	go clean
 	-rm ./bin/gimly
+	-rm -r ./web/build
 
 test:
 	go test ./...
