@@ -10,7 +10,7 @@ COPY . .
 
 RUN make build
 
-FROM alpine
+FROM scratch
 
 COPY --from=builder /app/bin/gimly /bin/gimly
 
