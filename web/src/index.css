@@ -3,5 +3,12 @@
 @tailwind utilities;
 
 body {
-  @apply bg-zinc-100;
+  /* FIXME: Background image */
+  @apply bg-zinc-100 
+  /* background: radial-gradient(circle, #eaeaea 10%, transparent 11%);
+  background-size: 1em 1em; */;
+}
+
+input {
+  @apply outline-none;
 }
