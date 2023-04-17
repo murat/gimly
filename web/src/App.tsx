@@ -3,6 +3,8 @@ import axios from "axios";
 import "./index.css";
 import {
   ArrowRight,
+  ArrowUpRight,
+  Copy,
   FileText,
   LinkSimple,
   WarningCircle,
@@ -25,6 +27,40 @@ interface ApiError {
   status: string;
   error: string;
 }
+
+interface IUrlListItemProps {
+  title?: string;
+  url: string;
+}
+
+const UrlListItem = (props: IUrlListItemProps) => {
+  const { title = "Untitled link", url } = props;
+
+  return (
+    <li className="mb-12 last:mb-0 ml-4 text-sm">
+      <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1 -left-1.5 border border-white"></div>
+      <h3 className="font-semibold text-gray-900">{title}</h3>
+      <div className="mt-1 mb-4 font-normal text-gray-500">
+        <div className="truncate">
+          <a href={url} target="_blank" rel="noreferrer">
+            {url}
+          </a>
+        </div>
+      </div>
+      <div className="rounded-md flex justify-between items-center">
+        <button
+          type="button"
+          className="text-black bg-gray-200 hover:bg-gray-300 transition-all font-medium rounded-lg text-xs px-3 py-2 text-center inline-flex items-center mr-2"
+        >
+          <Copy size={16} className="mr-1.5 opacity-50" />
+          Copy link
+        </button>
+
+        <div className="text-gray-400">Click count: #0 click</div>
+      </div>
+    </li>
+  );
+};
 
 const IndexPage: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -71,9 +107,9 @@ const IndexPage: React.FC = () => {
 
   return (
     <div className="px-6">
-      <div className="flex flex-col min-h-screen justify-center items-center pt-16 pb-8">
+      <div className="flex flex-col min-h-screen justify-center items-center pt-8 md:pt-16 pb-8">
         <div className="text-center mb-auto">
-          <h1 className="font-bold text-transparent text-4xl bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">
+          <h1 className="font-bold text-transparent text-2xl md:text-4xl bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">
             A simple yet powerful URL shortener for everyone.
           </h1>
 
@@ -82,7 +118,7 @@ const IndexPage: React.FC = () => {
             happen! 🎉
           </p>
         </div>
-
+        {/* header */}
         <div className="bg-white p-8 max-w-lg w-full mx-auto shadow-lg shadow-black/5 ring-1 ring-zinc-100 rounded-lg my-12">
           <form onSubmit={handleSubmit}>
             <div className="mb-8">
@@ -95,7 +131,7 @@ const IndexPage: React.FC = () => {
                 </div>
                 <input
                   type="text"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-gray-400 block w-full pl-10 p-2.5 transition-all"
+                  className="bg-zinc-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full pl-10 p-2.5 transition-all"
                   placeholder="Paste URL"
                   value={url}
                   onChange={(event) => setUrl(event.target.value)}
@@ -119,7 +155,7 @@ const IndexPage: React.FC = () => {
                 </div>
                 <input
                   type="text"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-gray-400 block w-full pl-10 p-2.5 transition-all"
+                  className="bg-zinc-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full pl-10 p-2.5 transition-all"
                   placeholder="Enter a title"
                   value={title}
                   onChange={(event) => setTitle(event.target.value)}
@@ -138,44 +174,51 @@ const IndexPage: React.FC = () => {
             </div>
           </form>
 
-          {/* // TODO: Complete url list section */}
-          {/* {urls.length > 0 && (
-            <ul className="url-list">
-              {urls.map((url) => (
-                <li key={url.url.url}>
-                  <div className="url-container">
-                    <div className="url-title">{url.url.title}</div>
-                    <div className="url-url">
-                      <a
-                        href={`/u/${url.url.url}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {url.url.url}
-                      </a>
-                    </div>
-                    {(url.click_count || 0) > 0 && (
-                      <div className="url-click-count">
-                        {url.click_count} clicks
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    onClick={(event) => handleCopyClick(event, url.url.url)}
-                    className="copy-button"
-                  >
-                    Copy
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )} */}
-        </div>
+          <div className="mt-8 pt-6 border-t border-zinc-100">
+            <div className="flex justify-between items-center mb-6">
+              <div className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-pink-500">
+                Shortened links.
+              </div>
 
-        <div className="text-sm text-zinc-500 mt-auto">
-          Gimly &copy; {new Date().getFullYear()}
+              {/* NOTE: Can be deleted if unnecessary */}
+              {urls.length > 0 && (
+                <div className="text-gray-400">Total: #count</div>
+              )}
+            </div>
+
+            {urls.length ? (
+              <ol className="relative border-l border-gray-200 max-h-72 scroll-smooth overflow-y-auto overscroll-auto">
+                <UrlListItem url="https://www.conventionalcommits.org/en/v1.0.0-beta.2/#summary" />
+
+                <UrlListItem
+                  url="https://www.freecodecamp.org/news/the-difference-between-arrow-functions-and-normal-functions/"
+                  title="My link title"
+                />
+              </ol>
+            ) : (
+              <p className="flex mt-3 text-sm text-gray-600">
+                <WarningCircle size={20} className="mr-1.5" /> There is no
+                shortened link yet.
+              </p>
+            )}
+          </div>
         </div>
+        {/* content */}
+        <div className="text-sm font-medium text-zinc-500 mt-auto">
+          Gimly &copy; {new Date().getFullYear()}
+          <span className="text-black mx-2">✦</span>
+          <a
+            href="https://github.com/murat/gimly"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center text-zinc-500"
+          >
+            GitHub <ArrowUpRight size={16} className="ml-1" />
+          </a>
+        </div>
+        {/* footer */}
       </div>
+      {/* container */}
     </div>
   );
 };
